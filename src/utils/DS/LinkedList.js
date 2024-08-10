@@ -10,6 +10,7 @@ class LinkedList {
     constructor() {
         this.head = null;
         this.tail = null;
+        this.nodeMapping = new Map();
     }
 
     append(value) {
@@ -23,10 +24,25 @@ class LinkedList {
             this.tail = newNode; 
         }
 
+        this.nodeMapping.set(value.id, newNode);
+
         return this;
     }
 
+
+    deleteById(id){
+        if (this.nodeMapping.has(id)){
+           return this.delete(this.nodeMapping.get(id))
+        }
+
+        return this;
+        
+    }
+
     delete(nodeToDelete) {
+
+        this.nodeMapping.delete(nodeToDelete.value.id);
+
         if (!this.head) return this;
 
         if (nodeToDelete === this.head) {
@@ -67,7 +83,9 @@ class LinkedList {
 
         function createNodeFromObject(nodeObject) {
             if (!nodeObject) return null;
+            const nodeVal = dataTransformer(nodeObject.value);
             const node = new Node(dataTransformer(nodeObject.value));
+            list.nodeMapping.set(nodeVal.id, node);
             node.next = createNodeFromObject(nodeObject.next);
             if (node.next) {
                 node.next.prev = node; 

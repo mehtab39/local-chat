@@ -1,20 +1,19 @@
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import UpdateChat from "./UpdateChat";
 
-const Chat = ({ messageNode, actions }) => {
+const Chat = ({ msg, actions }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const msg = messageNode.value;
     const handleDelete = () => {
-        actions.deleteMessage(messageNode);
+        actions.deleteMessage(msg);
     }
 
     const handleHide = () => {
-        actions.hideMessage(messageNode);
+        actions.hideMessage(msg);
         onClose()
     }
 
     const handleUnhide = () => {
-        actions.unhideMessage(messageNode);
+        actions.unhideMessage(msg);
         onClose()
     }
     return (

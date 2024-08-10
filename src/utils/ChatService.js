@@ -13,26 +13,26 @@ class ChatService{
         return StorageService.subscribe(callback)
     };
 
-    static sendMessage = (messageList, message) => {
-        const chatMessage = Chat.CreateMessage(message, UserService.id);
+    static sendMessage = (messageList, messageText) => {
+        const chatMessage = Chat.CreateMessage(messageText, UserService.id);
         const newMessage = new Chat(chatMessage);
         localStorage.setItem(STORAGE_KEY, messageList.append(newMessage).toStringified());
         StorageService.emit();
     };
 
-    static deleteMessage = (messageList, messageNode) => {
-        localStorage.setItem(STORAGE_KEY, messageList.delete(messageNode).toStringified());
+    static deleteMessage = (messageList, msg) => {
+        localStorage.setItem(STORAGE_KEY, messageList.deleteById(msg.id).toStringified());
         StorageService.emit();
     }
 
-    static hideMessage = (messageList, messageNode) => {
-        messageNode.value.hide();
+    static hideMessage = (messageList, msg) => {
+        msg.hide();
         localStorage.setItem(STORAGE_KEY, messageList.toStringified());
         StorageService.emit();
     }
 
-    static unhideMessage = (messageList, messageNode) => {
-        messageNode.value.unhide();
+    static unhideMessage = (messageList, msg) => {
+        msg.unhide();
         localStorage.setItem(STORAGE_KEY, messageList.toStringified());
         StorageService.emit();
     }

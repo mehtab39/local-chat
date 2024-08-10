@@ -14,16 +14,16 @@ export function useChat() {
         ChatService.sendMessage(messageList, text)
     }, [messageList])
 
-    const deleteMessage = (messageNode) => {
-        return ChatService.deleteMessage(messageList, messageNode)
+    const deleteMessage = (msg) => {
+        return ChatService.deleteMessage(messageList, msg)
     }
 
-    const hideMessage = (messageNode) => {
-        return ChatService.hideMessage(messageList, messageNode)
+    const hideMessage = (msg) => {
+        return ChatService.hideMessage(messageList, msg)
     }
 
-    const unhideMessage = (messageNode) => {
-        return ChatService.unhideMessage(messageList, messageNode)
+    const unhideMessage = (msg) => {
+        return ChatService.unhideMessage(messageList, msg)
     }
 
     return [messageList.head, sendMessage, { deleteMessage, hideMessage, unhideMessage }];
