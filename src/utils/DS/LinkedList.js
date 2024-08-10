@@ -2,6 +2,7 @@ class Node {
     constructor(message) {
         this.message = message;
         this.next = null;
+        this.prev = null; 
     }
 }
 
@@ -18,37 +19,44 @@ class LinkedList {
             this.head = this.tail = newNode;
         } else {
             this.tail.next = newNode;
-            this.tail = newNode;
+            newNode.prev = this.tail; 
+            this.tail = newNode; 
         }
 
         return this;
     }
 
     delete(nodeToDelete) {
-        if (!this.head) return 0;
+        if (!this.head) return this;
 
         if (nodeToDelete === this.head) {
             this.head = this.head.next;
-            if (this.head === null) {
+            if (this.head) {
+                this.head.prev = null;
+            } else {
                 this.tail = null;
             }
             return this;
         }
 
-        let prev = null;
-        let current = this.head;
-
-        while (current && current !== nodeToDelete) {
-            prev = current;
-            current = current.next;
-        }
-
-        if (current) {
-            prev.next = current.next;
-            if (current === this.tail) {
-                this.tail = prev; 
+        if (nodeToDelete === this.tail) {
+            this.tail = this.tail.prev;
+            if (this.tail) {
+                this.tail.next = null;
+            } else {
+                this.head = null;
             }
             return this;
+        }
+
+        let prev = nodeToDelete.prev;
+        let next = nodeToDelete.next;
+
+        if (prev) {
+            prev.next = next;
+        }
+        if (next) {
+            next.prev = prev;
         }
 
         return this;
@@ -61,6 +69,9 @@ class LinkedList {
             if (!nodeObject) return null;
             const node = new Node(dataTransformer(nodeObject.message));
             node.next = createNodeFromObject(nodeObject.next);
+            if (node.next) {
+                node.next.prev = node; 
+            }
             return node;
         }
 
@@ -88,7 +99,7 @@ class LinkedList {
             if (!node) return null;
             return {
                 message: node.message,
-                next: serializeNode(node.next) 
+                next: serializeNode(node.next)
             };
         }
         return {
