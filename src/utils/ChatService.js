@@ -30,6 +30,12 @@ class ChatService{
         localStorage.setItem(STORAGE_KEY, messageList.toStringified());
         StorageService.emit();
     }
+
+    static unhideMessage = (messageList, messageNode) => {
+        messageNode.value.unhide();
+        localStorage.setItem(STORAGE_KEY, messageList.toStringified());
+        StorageService.emit();
+    }
 }
 
 export default ChatService;

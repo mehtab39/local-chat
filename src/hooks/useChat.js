@@ -22,6 +22,10 @@ export function useChat() {
         return ChatService.hideMessage(messageList, messageNode)
     }
 
-    return [messageList.head, sendMessage, { deleteMessage, hideMessage }];
+    const unhideMessage = (messageNode) => {
+        return ChatService.unhideMessage(messageList, messageNode)
+    }
+
+    return [messageList.head, sendMessage, { deleteMessage, hideMessage, unhideMessage }];
 }
 

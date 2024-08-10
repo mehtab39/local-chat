@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, VStack } from "@chakra-ui/react";
 
-const UpdateChat = ({ isOpen, onClose, onDelete, onHide, onEdit }) => {
+const UpdateChat = ({ isOpen, onClose, onDelete, onHide, onUnhide,  isHidden, onEdit }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -12,9 +12,12 @@ const UpdateChat = ({ isOpen, onClose, onDelete, onHide, onEdit }) => {
                         <Button colorScheme="red" onClick={onDelete}>
                             Delete Message
                         </Button>
-                        <Button colorScheme="yellow" onClick={onHide}>
+                        {!isHidden  ? <Button colorScheme="yellow" onClick={onHide}>
                             Hide Message
                         </Button>
+                         : <Button colorScheme="blue" onClick={onUnhide}>
+                            Unhide Message
+                        </Button>}
                         <Button colorScheme="blue" onClick={onEdit}>
                             Edit Message
                         </Button>
