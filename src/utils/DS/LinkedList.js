@@ -1,6 +1,6 @@
 class Node {
-    constructor(message) {
-        this.message = message;
+    constructor(value) {
+        this.value = value;
         this.next = null;
         this.prev = null; 
     }
@@ -12,8 +12,8 @@ class LinkedList {
         this.tail = null;
     }
 
-    append(message) {
-        const newNode = new Node(message);
+    append(value) {
+        const newNode = new Node(value);
 
         if (!this.head) {
             this.head = this.tail = newNode;
@@ -67,7 +67,7 @@ class LinkedList {
 
         function createNodeFromObject(nodeObject) {
             if (!nodeObject) return null;
-            const node = new Node(dataTransformer(nodeObject.message));
+            const node = new Node(dataTransformer(nodeObject.value));
             node.next = createNodeFromObject(nodeObject.next);
             if (node.next) {
                 node.next.prev = node; 
@@ -98,7 +98,7 @@ class LinkedList {
         function serializeNode(node) {
             if (!node) return null;
             return {
-                message: node.message,
+                value: node.value,
                 next: serializeNode(node.next)
             };
         }

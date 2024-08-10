@@ -5,7 +5,7 @@ const ChatList = ({ messageNode, actions }) => {
     if (!messageNode) return null;
     return (
         <Box>
-            <Chat key={messageNode.message.id} messageNode={messageNode} actions={actions} />
+            <Chat key={messageNode.value.id} messageNode={messageNode} actions={actions} />
             <ChatList messageNode={messageNode.next} actions={actions} />
         </Box>
     )

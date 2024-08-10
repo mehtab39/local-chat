@@ -3,7 +3,7 @@ import UpdateChat from "./UpdateChat";
 
 const Chat = ({ messageNode, actions }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const msg = messageNode.message;
+    const msg = messageNode.value;
     const handleDelete = () => {
         actions.deleteMessage(messageNode);
     }
