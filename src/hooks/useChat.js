@@ -1,31 +1,36 @@
-import { useCallback, useMemo, useSyncExternalStore } from 'react';
-import Chat from '../utils/Chat';
+import { useCallback, useEffect, useRef } from 'react';
 import ChatService from '../utils/ChatService';
+import useRender from './useRender';
+import LinkedList from '../utils/DS/LinkedList';
 
 export function useChat() {
-    const stringifed = useSyncExternalStore(ChatService.subscribe, ChatService.getMessages);
+    const messageList = useRef(new LinkedList());
+    const render = useRender();
 
-    // LinkedList
-    const messageList = useMemo(() => {
-        return Chat.parseMessages(stringifed)
-    }, [stringifed])
+    function onFirstMessage() {
+        render()
+    }
+
+    useEffect(() => {
+        return ChatService.broadcastSubscribe(messageList.current, onFirstMessage);
+    }, [])
 
     const sendMessage = useCallback((text) => {
-        ChatService.sendMessage(messageList, text)
-    }, [messageList])
+        ChatService.sendMessageV2(messageList.current, text, onFirstMessage)
+    }, [])
 
     const deleteMessage = (msg) => {
-        return ChatService.deleteMessage(messageList, msg)
+        return ChatService.deleteMessageV2(messageList.current, msg)
     }
 
     const hideMessage = (msg) => {
-        return ChatService.hideMessage(messageList, msg)
+        return ChatService.hideMessageV2(messageList.current, msg)
     }
 
     const unhideMessage = (msg) => {
-        return ChatService.unhideMessage(messageList, msg)
+        return ChatService.unhideMessageV2(messageList.current, msg)
     }
 
-    return [messageList.head, sendMessage, { deleteMessage, hideMessage, unhideMessage }];
+    return [messageList.current.head, sendMessage, { deleteMessage, hideMessage, unhideMessage }];
 }
 

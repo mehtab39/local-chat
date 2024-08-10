@@ -13,6 +13,14 @@ class LinkedList {
         this.nodeMapping = new Map();
     }
 
+    getNodeValById(id){
+        return this.nodeMapping.get(id).value
+    }
+
+    isEmpty(){
+        return this.head === null;
+    }
+
     append(value) {
         const newNode = new Node(value);
 
@@ -34,9 +42,7 @@ class LinkedList {
         if (this.nodeMapping.has(id)){
            return this.delete(this.nodeMapping.get(id))
         }
-
-        return this;
-        
+        return this;    
     }
 
     delete(nodeToDelete) {

@@ -4,7 +4,6 @@ import user from './UserService';
 
 class Chat{
 
-
     static CreateMessage(text, authorId){
         return {
             text: text || '',
@@ -19,6 +18,16 @@ class Chat{
         this.authorId = msg.authorId;
         this.chatId = msg.chatId;
         this.isHidden = msg.isHidden;
+        this.onChangeCallback = null;
+    }
+
+    toJSON() {
+         return {
+             text: this.text,
+             chatId: this.chatId,
+             authorId: this.authorId,
+             isHidden: this.isHidden
+         }
     }
 
     hide(){
@@ -28,6 +37,15 @@ class Chat{
     unhide(){
         this.isHidden = false;
     }
+
+    registerOnChange(callback){
+        this.onChangeCallback = callback;
+    }
+
+    unregisterOnChange() {
+        this.onChangeCallback = null;
+    }
+
 
     static Instance(msg){
         return new Chat(msg);

@@ -1,40 +1,60 @@
+import BroadcastService from "./BroadcastService";
 import Chat from "./Chat";
-import StorageService from "./StorageService";
 import UserService from "./UserService";
 
-const STORAGE_KEY = 'chat-messages';
-
+const broadcastService = new BroadcastService()
 class ChatService{
-    static getMessages = () => {
-        return localStorage.getItem(STORAGE_KEY);
-    };
+    static broadcastSubscribe(messageList, onFirstMessage){
+        const onChange = ({type, data}) => {
+            let priority = 0;
+            if (type === 'NEW_MESSAGE'){
+                const isFirstMessage = messageList.isEmpty();
+                const newMessage = new Chat(data);
+                messageList.append(newMessage);
+                isFirstMessage ? onFirstMessage() : messageList.head.value.onChangeCallback(2)
+                return;
+            }
+            const msg = messageList.getNodeValById(data.msgId);
+            if (type === 'HIDE'){
+                msg.hide();
+                priority = 1;
+            }else if(type === 'UNHIDE'){
+                msg.unhide();
+                priority = 1;
+            } else if (type === 'DELETE'){
+                messageList.deleteById(msg.id);
+                priority = 2;
+            }
+            msg.onChangeCallback(priority);
+        }
+        return broadcastService.subscribe(onChange);
+    }
 
-    static subscribe = (callback) => {
-        return StorageService.subscribe(callback)
-    };
-
-    static sendMessage = (messageList, messageText) => {
+    static sendMessageV2 = (messageList, messageText, onFirstMessage) => {
+        const isFirstMessage = messageList.isEmpty();
         const chatMessage = Chat.CreateMessage(messageText, UserService.id);
         const newMessage = new Chat(chatMessage);
-        localStorage.setItem(STORAGE_KEY, messageList.append(newMessage).toStringified());
-        StorageService.emit();
+        messageList.append(newMessage);
+        isFirstMessage ?  onFirstMessage() : messageList.head.value.onChangeCallback(2)
+        broadcastService.broadcast('NEW_MESSAGE', chatMessage)
     };
 
-    static deleteMessage = (messageList, msg) => {
-        localStorage.setItem(STORAGE_KEY, messageList.deleteById(msg.id).toStringified());
-        StorageService.emit();
-    }
-
-    static hideMessage = (messageList, msg) => {
+    static hideMessageV2 = (_messageList, msg) => {
         msg.hide();
-        localStorage.setItem(STORAGE_KEY, messageList.toStringified());
-        StorageService.emit();
+        msg.onChangeCallback(1);
+        broadcastService.broadcast('HIDE', {msgId: msg.id})
     }
 
-    static unhideMessage = (messageList, msg) => {
+    static unhideMessageV2 = (_messageList, msg) => {
         msg.unhide();
-        localStorage.setItem(STORAGE_KEY, messageList.toStringified());
-        StorageService.emit();
+        msg.onChangeCallback(1);
+        broadcastService.broadcast('UNHIDE', { msgId: msg.id })
+    }
+
+    static deleteMessageV2 = (messageList, msg) => {
+        messageList.deleteById(msg.id);
+        msg.onChangeCallback(2);
+        broadcastService.broadcast('DELETE', { msgId: msg.id })
     }
 }
 
