@@ -13,6 +13,10 @@ export function useChat() {
         ChatService.sendMessage(text, messages)
     }, [messages])
 
-    return [messages.head, sendMessage, {}];
+    const deleteMessage = (messageNode) => {
+        return ChatService.deleteMessage(messages, messageNode)
+    }
+
+    return [messages.head, sendMessage, { deleteMessage }];
 }
 

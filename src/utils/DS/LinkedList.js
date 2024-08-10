@@ -32,7 +32,7 @@ class LinkedList {
             if (this.head === null) {
                 this.tail = null;
             }
-            return 1;
+            return this;
         }
 
         let prev = null;
@@ -48,10 +48,10 @@ class LinkedList {
             if (current === this.tail) {
                 this.tail = prev; 
             }
-            return 1;
+            return this;
         }
 
-        return 0;
+        return this;
     }
 
     static fromParsedObject(parsedLinkedList, dataTransformer) {

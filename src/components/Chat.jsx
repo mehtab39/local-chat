@@ -1,8 +1,12 @@
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import UpdateChat from "./UpdateChat";
 
-const Chat = ({ msg, actions }) => {
+const Chat = ({ messageNode, actions }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const msg = messageNode.message;
+    const handleDelete = () => {
+        actions.deleteMessage(messageNode);
+    }
     return (
         <Box display="flex" alignItems="center" p={2} mb={2}>
             <Box
@@ -15,7 +19,7 @@ const Chat = ({ msg, actions }) => {
                 {msg.text}
             </Box>
             <Button ml={2} onClick={onOpen}>Click</Button>
-            <UpdateChat isOpen={isOpen} onClose={onClose} onDelete={actions.onDelete} onHide={actions.onHide} onEdit={actions.onEdit}/>
+            <UpdateChat isOpen={isOpen} onClose={onClose} onDelete={handleDelete} onHide={actions.onHide} onEdit={actions.onEdit}/>
         </Box>
     );
 }
