@@ -4,19 +4,37 @@ import user from './UserService';
 
 class Chat{
 
-    static createId =  () => Math.random().toString(36).substr(2, 9);
 
-    constructor(text, authorId, chatId){
-        this.text = text;
-        this.authorId = authorId;
-        this.chatId = chatId;
+    static CreateMessage(text, authorId){
+        return {
+            text: text || '',
+            authorId: authorId || '',
+            chatId: Math.random().toString(36).substr(2, 9),
+            isHidden: false
+        }
     }
-    static toChat(msg){
-        return new Chat(msg.text, msg.authorId, msg.chatId);
+
+    constructor(msg = Chat.CreateMessage()){
+        this.text = msg.text;
+        this.authorId = msg.authorId;
+        this.chatId = msg.chatId;
+        this.isHidden = msg.isHidden;
+    }
+
+    hide(){
+        this.isHidden = true;
+    }
+
+    unhide(){
+        this.isHidden = false;
+    }
+
+    static Instance(msg){
+        return new Chat(msg);
     }
 
     static parseMessages(stringifed){
-        return LinkedList.fromString(stringifed, Chat.toChat);
+        return LinkedList.fromString(stringifed, Chat.Instance);
     }
 
     get id(){

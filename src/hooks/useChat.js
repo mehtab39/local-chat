@@ -5,18 +5,23 @@ import ChatService from '../utils/ChatService';
 export function useChat() {
     const stringifed = useSyncExternalStore(ChatService.subscribe, ChatService.getMessages);
 
-    const messages = useMemo(() => {
+    // LinkedList
+    const messageList = useMemo(() => {
         return Chat.parseMessages(stringifed)
     }, [stringifed])
 
     const sendMessage = useCallback((text) => {
-        ChatService.sendMessage(text, messages)
-    }, [messages])
+        ChatService.sendMessage(messageList, text)
+    }, [messageList])
 
     const deleteMessage = (messageNode) => {
-        return ChatService.deleteMessage(messages, messageNode)
+        return ChatService.deleteMessage(messageList, messageNode)
     }
 
-    return [messages.head, sendMessage, { deleteMessage }];
+    const hideMessage = (messageNode) => {
+        return ChatService.hideMessage(messageList, messageNode)
+    }
+
+    return [messageList.head, sendMessage, { deleteMessage, hideMessage }];
 }
 

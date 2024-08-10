@@ -13,14 +13,21 @@ class ChatService{
         return StorageService.subscribe(callback)
     };
 
-    static sendMessage = (message, messageList, onAction) => {
-        const newMessage = new Chat(message, UserService.id, Chat.createId(), onAction);
+    static sendMessage = (messageList, message) => {
+        const chatMessage = Chat.CreateMessage(message, UserService.id);
+        const newMessage = new Chat(chatMessage);
         localStorage.setItem(STORAGE_KEY, messageList.append(newMessage).toStringified());
         StorageService.emit();
     };
 
     static deleteMessage = (messageList, messageNode) => {
         localStorage.setItem(STORAGE_KEY, messageList.delete(messageNode).toStringified());
+        StorageService.emit();
+    }
+
+    static hideMessage = (messageList, messageNode) => {
+        messageNode.value.hide();
+        localStorage.setItem(STORAGE_KEY, messageList.toStringified());
         StorageService.emit();
     }
 }

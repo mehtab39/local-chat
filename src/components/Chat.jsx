@@ -7,6 +7,11 @@ const Chat = ({ messageNode, actions }) => {
     const handleDelete = () => {
         actions.deleteMessage(messageNode);
     }
+
+    const handleHide = () => {
+        actions.hideMessage(messageNode);
+        onClose()
+    }
     return (
         <Box display="flex" alignItems="center" p={2} mb={2}>
             <Box
@@ -16,10 +21,10 @@ const Chat = ({ messageNode, actions }) => {
                 maxWidth="70%"
                 wordBreak="break-word"
             >
-                {msg.text}
+                {msg.isHidden ? 'hidden' : msg.text}
             </Box>
             <Button ml={2} onClick={onOpen}>Click</Button>
-            <UpdateChat isOpen={isOpen} onClose={onClose} onDelete={handleDelete} onHide={actions.onHide} onEdit={actions.onEdit}/>
+            <UpdateChat isOpen={isOpen} onClose={onClose} onDelete={handleDelete} onHide={handleHide} onEdit={actions.onEdit}/>
         </Box>
     );
 }
