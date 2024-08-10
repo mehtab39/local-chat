@@ -1,6 +1,6 @@
-import { List } from 'immutable';
+
+import LinkedList from './DS/LinkedList';
 import user from './UserService';
-const emptyList = List()
 
 class Chat{
 
@@ -16,8 +16,7 @@ class Chat{
     }
 
     static parseMessages(stringifed){
-        if (!stringifed) return emptyList;
-        return List(JSON.parse(stringifed)).map((msg) => Chat.toChat(msg));
+        return LinkedList.fromString(stringifed, Chat.toChat);
     }
 
     get id(){

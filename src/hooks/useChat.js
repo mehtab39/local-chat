@@ -13,6 +13,6 @@ export function useChat() {
         ChatService.sendMessage(text, messages)
     }, [messages])
 
-    return [messages, sendMessage, {}];
+    return [messages.head, sendMessage, {}];
 }
 
