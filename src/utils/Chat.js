@@ -1,13 +1,14 @@
 
+import { fromJS } from 'immutable';
 import LinkedList from './DS/LinkedList';
 import user from './UserService';
 
-class Chat{
 
-    static CreateMessage(text, authorId){
+class Chat{
+    static CreateMessage(text){
         return {
             text: text || '',
-            authorId: authorId || '',
+            authorId: user.id,
             chatId: Math.random().toString(36).substr(2, 9),
             isHidden: false
         }
@@ -48,7 +49,7 @@ class Chat{
 
 
     static Instance(msg){
-        return new Chat(msg);
+        return fromJS(new Chat(msg));
     }
 
     static parseMessages(stringifed){

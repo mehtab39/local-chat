@@ -1,6 +1,5 @@
 import BroadcastService from "./BroadcastService";
 import Chat from "./Chat";
-import UserService from "./UserService";
 
 const broadcastService = new BroadcastService()
 class ChatService{
@@ -40,10 +39,10 @@ class ChatService{
 
     static sendMessageV2 = (messageList, messageText, onFirstMessage) => {
         const isFirstMessage = messageList.isEmpty();
-        const chatMessage = Chat.CreateMessage(messageText, UserService.id);
+        const chatMessage = Chat.CreateMessage(messageText);
         const newMessage = new Chat(chatMessage);
         messageList.append(newMessage);
-        isFirstMessage ?  onFirstMessage() : messageList.head.value.onChangeCallback(2)
+       isFirstMessage ?  onFirstMessage() : messageList.head.value.onChangeCallback(2)
         broadcastService.broadcast('NEW_MESSAGE', chatMessage)
     };
 

@@ -1,3 +1,5 @@
+import { fromJS } from 'immutable';
+
 class Node {
     constructor(value) {
         this.value = value;
@@ -13,6 +15,10 @@ class LinkedList {
         this.nodeMapping = new Map();
     }
 
+    static createNode(value){
+        return fromJS(new Node(value))
+    }
+
     getNodeValById(id){
         return this.nodeMapping.get(id).value
     }
@@ -22,7 +28,7 @@ class LinkedList {
     }
 
     append(value) {
-        const newNode = new Node(value);
+        const newNode = LinkedList.createNode(value)
 
         if (!this.head) {
             this.head = this.tail = newNode;
@@ -84,13 +90,16 @@ class LinkedList {
         return this;
     }
 
+    static Create(){
+        return fromJS(new LinkedList());
+    }
     static fromParsedObject(parsedLinkedList, dataTransformer) {
-        const list = new LinkedList();
+        const list = LinkedList.Create();
 
         function createNodeFromObject(nodeObject) {
             if (!nodeObject) return null;
             const nodeVal = dataTransformer(nodeObject.value);
-            const node = new Node(dataTransformer(nodeObject.value));
+            const node = LinkedList.createNode(dataTransformer(nodeObject.value))
             list.nodeMapping.set(nodeVal.id, node);
             node.next = createNodeFromObject(nodeObject.next);
             if (node.next) {
@@ -114,7 +123,7 @@ class LinkedList {
             const parsed = JSON.parse(stringifedLinkedList);
             return LinkedList.fromParsedObject(parsed, dataTransformer);
         }
-        return new LinkedList();
+        return LinkedList.Create()
     }
 
     // Custom JSON serialization to omit internal properties
