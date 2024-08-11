@@ -4,6 +4,14 @@ import UserService from "./UserService";
 
 const broadcastService = new BroadcastService()
 class ChatService{
+
+    static getMessages(){
+        return localStorage.getItem('chat-messages');
+    }
+
+    static storeMessages(messageList){
+        localStorage.setItem('chat-messages', messageList.toStringified());
+    }
     static broadcastSubscribe(messageList, onFirstMessage){
         const onChange = ({type, data}) => {
             let priority = 0;
