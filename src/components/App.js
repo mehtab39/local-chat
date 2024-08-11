@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Profile from './Profile';
-import Chat from './Chat';
+import Chat from './ChatMain';
 import { ChakraProvider } from '@chakra-ui/react';
+import VideoChat from './VideoChat';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
             <Routes>
               <Route path="/profile" element={<Profile />} />
               <Route path="/chat" element={<Chat />} />
+              <Route path="/video-chat" element={<VideoChat />} />
               <Route path="/" element={<Home />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

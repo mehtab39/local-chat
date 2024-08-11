@@ -3,7 +3,7 @@ import ChatList from './ChatList';
 import Input from './Input';
 import { ChakraProvider } from '@chakra-ui/react'
 
-const Main = () => {
+const ChatMain = () => {
   const [messageHead, sendMessage, actions] = useChat();
   return (
     <ChakraProvider>
@@ -13,4 +13,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default ChatMain;
