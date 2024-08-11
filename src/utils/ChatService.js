@@ -1,7 +1,9 @@
+import { fromEvent, map, merge, scan, startWith, filter } from "rxjs";
 import BroadcastService from "./BroadcastService";
 import Chat from "./Chat";
+import user from "./UserService";
 
-const broadcastService = new BroadcastService()
+const broadcastService = new BroadcastService('ChatService', user.id)
 class ChatService{
 
     static getMessages(){
@@ -34,7 +36,33 @@ class ChatService{
             }
             msg.onChangeCallback(priority);
         }
-        return broadcastService.subscribe(onChange);
+        const subscription = broadcastService.message$.subscribe(onChange);
+     
+        return () =>{
+            subscription.unsubscribe();
+           
+        } 
+    }
+
+
+    static notificationSubscribe(onNotification) {
+        const count$ = broadcastService.message$.pipe(
+            scan(count => count + 1, 0)
+        );
+
+        const visibilityChange$ = fromEvent(document, 'visibilitychange').pipe(
+            map(() => document.visibilityState === 'visible'),
+            startWith(document.visibilityState === 'visible')
+        );
+
+        const combined$ = merge(count$, visibilityChange$.pipe(
+            filter(visible => visible),
+            scan(() => 0, 0)
+        ));
+
+        const subscription = combined$.subscribe(count => onNotification(count));
+
+        return () => subscription.unsubscribe();
     }
 
     static sendMessageV2 = (messageList, messageText, onFirstMessage) => {
@@ -42,7 +70,7 @@ class ChatService{
         const chatMessage = Chat.CreateMessage(messageText);
         const newMessage = new Chat(chatMessage);
         messageList.append(newMessage);
-       isFirstMessage ?  onFirstMessage() : messageList.head.value.onChangeCallback(2)
+        isFirstMessage ?  onFirstMessage() : messageList.head.value.onChangeCallback(2)
         broadcastService.broadcast('NEW_MESSAGE', chatMessage)
     };
 

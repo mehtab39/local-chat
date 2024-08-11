@@ -16,6 +16,32 @@ export function useChat() {
         return ChatService.broadcastSubscribe(messageList.current, onFirstMessage);
     }, [])
 
+
+    useEffect(() => {
+
+        const requestNotificationPermission = () => {
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    console.log('Notification permission:', permission);
+                });
+            }
+        };
+
+        requestNotificationPermission();
+
+        const showNotification = (count) => {
+            if(count <= 0) return;
+            if (Notification.permission === 'granted') {
+                new Notification('New Messages', {
+                    body: `You have ${count} new messages.`,
+                });
+            }
+        };
+
+        return ChatService.notificationSubscribe(showNotification);
+    }, []);
+
+
     useEffect(() => {
         window.addEventListener('beforeunload', () => {
             ChatService.storeMessages(messageList.current)
