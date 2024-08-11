@@ -2,6 +2,7 @@ import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import UpdateChat from "./UpdateChat";
 import { useEffect } from "react";
 import useRender from "../hooks/useRender";
+import { filter, fromEventPattern } from "rxjs";
 
 const Chat = ({ msg, actions, listRender }) => {
     const render = useRender();
@@ -22,15 +23,27 @@ const Chat = ({ msg, actions, listRender }) => {
     }
 
     useEffect(() => {
-        msg.registerOnChange((impact) => {
-            if (impact === 0) return;
-            if (impact === 1) render();
-            if (impact > 1) listRender(); 
-        })
+
+        const observable$ = fromEventPattern(
+            (handler) => msg.registerOnChange(handler),
+            () => msg.unregisterOnChange()
+        );
+
+        const subscription = observable$.pipe(
+            filter(impact => impact !== 0) 
+        ).subscribe(impact => {
+            if (impact === 1) {
+                render();
+            } else if (impact > 1) {
+                listRender();
+            }
+        });
+
         return () => {
-            msg.unregisterOnChange();
-        }
-    }, [msg])
+            subscription.unsubscribe();
+        };
+    }, []);
+
     return (
         <Box display="flex" alignItems="center" p={2} mb={2}>
             <Box
