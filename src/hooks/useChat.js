@@ -8,13 +8,13 @@ export function useChat() {
 
     const render = useRender();
 
-    function onFirstMessage() {
+    const onFirstMessage = useCallback(() => {
         render()
-    }
+    }, [render])
 
     useEffect(() => {
         return ChatService.broadcastSubscribe(messageList.current, onFirstMessage);
-    }, [])
+    }, [onFirstMessage])
 
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export function useChat() {
     }, [])
     const sendMessage = useCallback((text) => {
         ChatService.sendMessageV2(messageList.current, text, onFirstMessage)
-    }, [])
+    }, [onFirstMessage])
 
     const deleteMessage = (msg) => {
         return ChatService.deleteMessageV2(messageList.current, msg)

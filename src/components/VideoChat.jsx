@@ -7,7 +7,7 @@ const VideoChat = () => {
     const localVideoRef = useRef(null);
     const remoteVideoRef = useRef(null);
 
-    const { sendMessage, lastMessage } = useWebSocket('ws://localhost:8080', {
+    const { sendMessage } = useWebSocket('ws://localhost:8080', {
         onMessage: (event) => {
             const data = JSON.parse(event.data);
             handleSignalingMessage(data);
@@ -56,7 +56,7 @@ const VideoChat = () => {
                 pc.close();
             };
         }
-    }, [localStream]);
+    }, [localStream, sendMessage]);
 
     const handleSignalingMessage = async (data) => {
         console.log('Received signaling message:', data);

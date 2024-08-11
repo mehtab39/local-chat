@@ -1,5 +1,5 @@
 import { fromEvent } from 'rxjs';
-import { map, filter, scan } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
 class BroadcastService {
     constructor(channelName = 'defaultChannel', userId) {

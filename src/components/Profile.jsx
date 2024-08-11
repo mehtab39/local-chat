@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import {
-    Box, Button, FormControl, FormLabel, Input, Textarea, Image, VStack, HStack, useToast, Flex
+    Box, Button, FormControl, FormLabel, Input, Textarea, Image, VStack, HStack, useToast
 } from '@chakra-ui/react';
 import { Map, fromJS } from 'immutable';
 

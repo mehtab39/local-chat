@@ -42,7 +42,7 @@ const Chat = ({ msg, actions, listRender }) => {
         return () => {
             subscription.unsubscribe();
         };
-    }, []);
+    }, [listRender, msg, render]);
 
     return (
         <Box display="flex" alignItems="center" p={2} mb={2}>
